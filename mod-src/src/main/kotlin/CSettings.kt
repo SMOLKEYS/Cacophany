@@ -10,8 +10,24 @@ import mindustry.ui.dialogs.SettingsMenuDialog.SettingsTable.Setting
 object CSettings {
 
     fun load(){
-        Vars.ui.settings.addCategory("Cacophony", Icon.refresh){
-            it.buttonPref("randomizesounds"){
+        Vars.ui.settings.addCategory("Cacophony", Icon.refresh){t ->
+            t.checkPref("randomizeblocksounds", true){
+                CVars.randomizeBlockSounds = it
+            }
+
+            t.checkPref("randomizebulletsounds", false){
+                CVars.randomizeBulletSounds = it
+            }
+
+            t.checkPref("randomizeunitsounds", false){
+                CVars.randomizeUnitSounds = it
+            }
+
+            t.checkPref("randomizeweaponsounds", false){
+                CVars.randomizeWeaponSounds = it
+            }
+
+            t.buttonPref("randomizesounds"){
                 CVars.loadCustomSounds()
                 CVars.begin()
             }

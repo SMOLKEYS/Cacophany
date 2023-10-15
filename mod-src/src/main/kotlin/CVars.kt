@@ -14,11 +14,18 @@ import mindustry.type.*
 import mindustry.world.Block
 import mindustry.world.blocks.defense.turrets.Turret
 import java.lang.reflect.Field
+import com.github.mnemotechnician.mkui.delegates.setting
 
 @Suppress("MemberVisibilityCanBePrivate")
 object CVars {
-
+    val syn = "cacophony-"
     val sounds = Seq<Sound>()
+
+    var randomizeBlockSounds by setting(true, syn)
+    //lets... not overwhelm them
+    var randomizeBulletSounds by setting(false, syn)
+    var randomizeUnitSounds by setting(false, syn)
+    var randomizeWeaponSounds by setting(false, syn)
 
 
     private fun trySoundInit(file: Fi): Sound?{
@@ -78,7 +85,7 @@ object CVars {
     }
 
     fun begin(){
-        getSoundFields<Block> {fi ->
+        if(randomizeBlockSounds) getSoundFields<Block> {fi ->
             try{
                 fi.isAccessible = true
                 Vars.content.blocks().each<Block>({ it is Block }){
@@ -87,7 +94,7 @@ object CVars {
             }catch(_: Exception){}
         }
 
-        getSoundFields<BulletType> {fi ->
+        if(randomizeBulletSounds) getSoundFields<BulletType> {fi ->
             try{
                 fi.isAccessible = true
                 Vars.content.bullets().each{bul ->
@@ -96,7 +103,7 @@ object CVars {
             }catch(_: Exception){}
         }
 
-        getSoundFields<UnitType> {fi ->
+        if(randomizeUnitSounds) getSoundFields<UnitType> {fi ->
             try{
                 fi.isAccessible = true
                 Vars.content.units().each{unit ->
@@ -105,7 +112,7 @@ object CVars {
             }catch(_: Exception){}
         }
 
-        getSoundFields<Weapon> {fi ->
+        if(randomizeWeaponSounds) getSoundFields<Weapon> {fi ->
             try{
                 fi.isAccessible = true
                 Vars.content.units().each{unit ->
