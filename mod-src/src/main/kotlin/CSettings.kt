@@ -12,6 +12,7 @@ object CSettings {
     fun load(){
         Vars.ui.settings.addCategory("Cacophony", Icon.refresh){
             it.buttonPref("randomizesounds"){
+                CVars.loadCustomSounds()
                 CVars.begin()
             }
         }

@@ -12,6 +12,7 @@ class Cacophony : Mod() {
 		}
 		Events.on(EventType.ContentInitEvent::class.java) {
 			CVars.loadSounds()
+			CVars.loadCustomSounds()
 			CVars.begin()
 		}
 	}

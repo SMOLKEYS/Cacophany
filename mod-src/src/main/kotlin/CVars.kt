@@ -1,7 +1,11 @@
 package screech
 
+import arc.Core
 import arc.audio.Sound
+import arc.files.Fi
 import arc.struct.Seq
+import arc.util.ArcRuntimeException
+import arc.util.Log
 import mindustry.Vars
 import mindustry.ctype.Content
 import mindustry.entities.bullet.BulletType
@@ -15,6 +19,21 @@ import java.lang.reflect.Field
 object CVars {
 
     val sounds = Seq<Sound>()
+
+
+    private fun trySoundInit(file: Fi): Sound?{
+        var sfx: Sound? = null
+
+        try{
+            sfx = Sound(file)
+        }catch(e: ArcRuntimeException){
+            Log.err("Failed to load sound file: ${file.name()}")
+        }
+
+        if(sfx != null) Log.info("Loaded sound: ${file.name()}")
+
+        return sfx
+    }
 
     fun loadSounds(){
         Sounds::class.java.declaredFields.forEach {
@@ -33,6 +52,23 @@ object CVars {
                     sounds.add(fi.get(everything) as Sound)
                 }
             }catch(_: Exception){}
+        }
+    }
+
+    fun loadCustomSounds(){
+        val dir = Core.settings.dataDirectory.child("cacophony")
+
+        if(!dir.exists()) dir.mkdirs()
+
+        dir.walk{
+            when{
+                it.extension().equals("ogg") -> {
+                    val sfx = trySoundInit(it)
+
+                    if(sfx != null) sounds.add(sfx)
+                }
+                else -> Log.warn("Unknown file: ${it.name()}")
+            }
         }
     }
 
