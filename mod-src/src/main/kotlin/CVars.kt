@@ -67,6 +67,11 @@ object CVars {
 
                     if(sfx != null) sounds.add(sfx)
                 }
+                it.extension().equals("mp3") -> {
+                    val sfx = trySoundInit(it)
+
+                    if(sfx != null) sounds.add(sfx)
+                }
                 else -> Log.warn("Unknown file: ${it.name()}")
             }
         }
